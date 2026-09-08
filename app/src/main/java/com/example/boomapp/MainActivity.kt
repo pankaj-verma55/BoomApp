@@ -9,25 +9,53 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.boomapp.ui.theme.BoomAppTheme
+import com.example.boomapp.welcomeScreen.OnboardingScreen
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         installSplashScreen()
+        actionBar?.hide()
+        val preferences = OnboardingPreferences(applicationContext)
         setContent {
-            BoomAppTheme {
+            // Collect the completion status; null represents loading
+            val isCompleted by preferences.isOnboardingCompleted.collectAsState(initial = null)
+            val scope = rememberCoroutineScope()
+            when (isCompleted) {
+                null -> {
+                    // Optional: Show Splash Screen / Empty Box while DataStore loads
+                }
+                false -> {
+                    // First time User
+                    OnboardingScreen(
+                        onFinished = {
+                            scope.launch {
+                                preferences.setOnboardingCompleted()
+                            }
+                        }
+                    )
+                }
+                true -> {
+                    BoomAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
+//                    HomeScreen()
+                }
             }
+        }
         }
     }
 }
