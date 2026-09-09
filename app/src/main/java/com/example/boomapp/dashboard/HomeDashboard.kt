@@ -1,7 +1,10 @@
 package com.example.boomapp.dashboard
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -20,12 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import com.example.boomapp.R
+import com.example.boomapp.data.AdmobBanner
 
 data class BottomNavItem(
     val title: String,
     val iconRes: Int
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeDashboard(modifier: Modifier = Modifier) {
     var selectedItemIndex by remember { mutableIntStateOf(0) }
@@ -42,28 +47,31 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
         containerColor = colorResource(R.color.cream),
         topBar = {},
         bottomBar = {
-            NavigationBar(
-                containerColor = Color.White
-            ) {
-                navItems.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        selected = selectedItemIndex == index,
-                        onClick = { selectedItemIndex = index },
-                        label = { Text(text = item.title) },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = item.iconRes),
-                                contentDescription = item.title
+            Column {
+                AdmobBanner()
+                NavigationBar(
+                    containerColor = Color.White
+                ) {
+                    navItems.forEachIndexed { index, item ->
+                        NavigationBarItem(
+                            selected = selectedItemIndex == index,
+                            onClick = { selectedItemIndex = index },
+                            label = { Text(text = item.title) },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = item.iconRes),
+                                    contentDescription = item.title
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = colorResource(R.color.darkBrown),
+                                selectedTextColor = colorResource(R.color.darkBrown),
+                                unselectedIconColor = colorResource(R.color.lightBrown),
+                                unselectedTextColor = colorResource(R.color.lightBrown),
+                                indicatorColor = colorResource(R.color.lightRed).copy(alpha = 0.2f)
                             )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = colorResource(R.color.darkBrown),
-                            selectedTextColor = colorResource(R.color.darkBrown),
-                            unselectedIconColor = colorResource(R.color.lightBrown),
-                            unselectedTextColor = colorResource(R.color.lightBrown),
-                            indicatorColor = colorResource(R.color.lightRed).copy(alpha = 0.2f)
                         )
-                    )
+                    }
                 }
             }
         }
@@ -83,3 +91,4 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
         }
     }
 }
+

@@ -35,6 +35,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -62,4 +63,6 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.0")
 //    DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+//    Ad Mob
+    implementation("com.google.android.gms:play-services-ads:23.3.0")
 }
