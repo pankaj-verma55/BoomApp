@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
+import com.example.boomapp.data.TrackItem
+import com.example.boomapp.dialog.EditProfile
 import com.example.boomapp.dialog.ReminderTimeBottomSheet
 
 private val ScreenBackground = Color(0xFFFAF7F2)
@@ -34,13 +36,7 @@ private val SwitchThumbColor = Color.White
 private val SwitchTrackActive = Color(0xFF8B4D3E)
 private val SwitchTrackInactive = Color(0xFFE2D6CF)
 
-data class TrackItem(
-    val title: String,
-    val icon: ImageVector,
-    val iconTint: Color,
-    val badgeBg: Color,
-    val initialChecked: Boolean = true
-)
+
 
 @Composable
 fun SettingsScreen(
@@ -48,6 +44,8 @@ fun SettingsScreen(
     userName: String = "Verma",
     onSignOutClick: () -> Unit = {}
 ) {
+    var showEditProfileSheet by remember { mutableStateOf(false) }
+    var userStage by remember { mutableStateOf<String?>("Not set") }
     var showReminderSheet by remember { mutableStateOf(false) }
     var reminderTime by remember { mutableStateOf("8:00 AM") }
     var notificationsEnabled by remember { mutableStateOf(true) }
@@ -140,7 +138,7 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /* Edit Profile Action */ },
+                            .clickable { showEditProfileSheet = true },
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -155,6 +153,16 @@ fun SettingsScreen(
                             contentDescription = null,
                             tint = TextMuted,
                             modifier = Modifier.size(18.dp)
+                        )
+                    }
+                    if (showEditProfileSheet) {
+                        EditProfile(
+                            currentName = userName,
+                            currentStageId = userStage,
+                            onDismissRequest = { showEditProfileSheet = false },
+                            onSaveProfile = { name, newStageId ->
+                                userStage = newStageId
+                            }
                         )
                     }
                 }
@@ -197,10 +205,12 @@ fun SettingsScreen(
                             icon = ImageVector.vectorResource(id = R.drawable.ic_sleep),
                             Color(0xFF53597D),
                             Color(0xFFEAEBFA)),
-                        TrackItem("Cycle",
+                        TrackItem(
+                            "Cycle",
                             icon = ImageVector.vectorResource(id = R.drawable.ic_period),
                             Color(0xFFA64D43),
-                            Color(0xFFF9EAE7)),
+                            Color(0xFFF9EAE7)
+                        ),
                         TrackItem("Symptom check-in",
                             icon = ImageVector.vectorResource(id = R.drawable.ic_smile),
                             Color(0xFFB88E4B),
