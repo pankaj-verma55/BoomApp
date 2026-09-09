@@ -16,12 +16,10 @@ class OnboardingPreferences(private val context: Context) {
         private val USER_NAME_KEY = stringPreferencesKey("user_name")
     }
 
-    // Reads whether onboarding is complete (defaults to false)
     val isOnboardingCompleted: Flow<Boolean> = context.dataStore.data.map { preferences ->
         preferences[ONBOARDING_COMPLETED_KEY] ?: false
     }
 
-    // Marks onboarding as complete
     suspend fun setOnboardingCompleted() {
         context.dataStore.edit { preferences ->
             preferences[ONBOARDING_COMPLETED_KEY] = true

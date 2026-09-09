@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- Colors ---
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
 private val MaroonBrown = Color(0xFF8B4D3E)
@@ -36,7 +35,6 @@ fun LogMealsBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    // Track selections for each meal: "Light", "Balanced", "Indulgent", "Skipped"
     var selectedBreakfast by remember { mutableStateOf<String?>(null) }
     var selectedLunch by remember { mutableStateOf<String?>(null) }
     var selectedDinner by remember { mutableStateOf<String?>(null) }
@@ -49,7 +47,6 @@ fun LogMealsBottomSheet(
         containerColor = Color.White,
         shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
         dragHandle = {
-            // Warm blush handle bar matching the design
             Box(
                 modifier = Modifier
                     .padding(top = 12.dp, bottom = 8.dp)
@@ -67,7 +64,6 @@ fun LogMealsBottomSheet(
                 .padding(horizontal = 24.dp)
                 .padding(bottom = 32.dp)
         ) {
-            // --- Title and Close Button ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +104,6 @@ fun LogMealsBottomSheet(
                 modifier = Modifier.padding(top = 8.dp, bottom = 18.dp)
             )
 
-            // --- Breakfast Section ---
             MealSelectionSection(
                 mealName = "Breakfast",
                 selectedOption = selectedBreakfast,
@@ -117,7 +112,6 @@ fun LogMealsBottomSheet(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            // --- Lunch Section ---
             MealSelectionSection(
                 mealName = "Lunch",
                 selectedOption = selectedLunch,
@@ -126,7 +120,6 @@ fun LogMealsBottomSheet(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            // --- Dinner Section ---
             MealSelectionSection(
                 mealName = "Dinner",
                 selectedOption = selectedDinner,
@@ -135,7 +128,6 @@ fun LogMealsBottomSheet(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- Logged Summary Text ---
             Text(
                 text = "$loggedCount of 3 meals logged today",
                 fontSize = 12.sp,
@@ -164,7 +156,6 @@ private fun MealSelectionSection(
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
-        // Row 1: Light | Balanced
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -185,7 +176,6 @@ private fun MealSelectionSection(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Row 2: Indulgent | Skipped
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)

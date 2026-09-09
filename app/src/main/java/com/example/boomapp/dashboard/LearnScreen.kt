@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
 
-// Color constants
 private val ScreenBackground = Color(0xFFFAF7F2)
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
@@ -83,7 +82,6 @@ fun LearnScreen(
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // --- 1. Header ---
         item {
             Column(
                 modifier = Modifier
@@ -108,7 +106,6 @@ fun LearnScreen(
             }
         }
 
-        // --- 2. Sections & Questions ---
         sections.forEach { section ->
             item {
                 Text(

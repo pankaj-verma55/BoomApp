@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
 import com.example.boomapp.dialog.ReminderTimeBottomSheet
 
-// Color Palette
 private val ScreenBackground = Color(0xFFFAF7F2)
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
@@ -43,19 +42,10 @@ data class TrackItem(
     val initialChecked: Boolean = true
 )
 
-data class GoalTargetItem(
-    val title: String,
-    val icon: ImageVector,
-    val iconTint: Color,
-    val badgeBg: Color,
-    val count: Int,
-    val unit: String
-)
-
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    userName: String = "Pankaj",
+    userName: String = "Verma",
     onSignOutClick: () -> Unit = {}
 ) {
     var showReminderSheet by remember { mutableStateOf(false) }
@@ -75,7 +65,6 @@ fun SettingsScreen(
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // --- 1. Header ---
         item {
             Column(
                 modifier = Modifier
@@ -100,7 +89,6 @@ fun SettingsScreen(
             }
         }
 
-        // --- 2. Profile Card ---
         item {
             Card(
                 shape = RoundedCornerShape(20.dp),
@@ -173,7 +161,6 @@ fun SettingsScreen(
             }
         }
 
-        // --- 3. What you're tracking ---
         item {
             SectionHeader(title = "What you're tracking")
 
@@ -235,7 +222,6 @@ fun SettingsScreen(
             }
         }
 
-        // --- 4. Daily goal targets ---
         item {
             SectionHeader(title = "Daily goal targets")
 
@@ -311,7 +297,6 @@ fun SettingsScreen(
             }
         }
 
-        // --- 5. Notifications & App Info Card ---
         item {
             Card(
                 shape = RoundedCornerShape(20.dp),
@@ -356,7 +341,6 @@ fun SettingsScreen(
                         color = Color(0xFFF1ECE6)
                     )
 
-                    // Reminder Time Row
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -387,7 +371,6 @@ fun SettingsScreen(
                         color = Color(0xFFF1ECE6)
                     )
 
-                    // Live Notification Preview
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -409,7 +392,6 @@ fun SettingsScreen(
                         color = Color(0xFFF1ECE6)
                     )
 
-                    // App Version
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -422,7 +404,6 @@ fun SettingsScreen(
             }
         }
 
-        // --- 6. Sign out Button ---
         item {
             OutlinedButton(
                 onClick = onSignOutClick,
@@ -446,7 +427,6 @@ fun SettingsScreen(
     }
 }
 
-// Section Header Sub-composable
 @Composable
 private fun SectionHeader(title: String) {
     Text(
@@ -460,7 +440,6 @@ private fun SectionHeader(title: String) {
     )
 }
 
-// Tracking Switch Row
 @Composable
 private fun TrackingSwitchRow(
     item: TrackItem,
@@ -510,7 +489,6 @@ private fun TrackingSwitchRow(
     }
 }
 
-// Goal Target Counter Row (- count unit +)
 @Composable
 private fun GoalCounterRow(
     title: String,
@@ -553,7 +531,6 @@ private fun GoalCounterRow(
             )
         }
 
-        // Stepper: [-]  count unit  [+]
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)

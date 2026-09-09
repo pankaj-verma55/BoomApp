@@ -36,10 +36,8 @@ fun AdmobBanner(
     val context = LocalContext.current
     val appPreferences = remember { OnboardingPreferences(context) }
 
-    // Read the DataStore value; defaults to false until loaded
     val canShowAds by appPreferences.isOnboardingCompleted.collectAsState(initial = false)
 
-    // If it's the first time user, don't load or render the banner at all
     if (!canShowAds) {
         return
     }

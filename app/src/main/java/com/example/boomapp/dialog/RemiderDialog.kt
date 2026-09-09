@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
 
-// --- Colors ---
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
 private val MaroonBrown = Color(0xFF8B4D3E)
@@ -79,7 +78,6 @@ fun ReminderTimeBottomSheet(
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 28.dp)
         ) {
-            // --- Title & Close Button ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,7 +118,6 @@ fun ReminderTimeBottomSheet(
                 modifier = Modifier.padding(top = 6.dp, bottom = 18.dp)
             )
 
-            // --- Preset Options ---
             options.forEach { option ->
                 val isSelected = selectedOptionId == option.id
 
@@ -142,7 +139,6 @@ fun ReminderTimeBottomSheet(
                             .padding(horizontal = 16.dp, vertical = 14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Radio circle
                         Box(
                             modifier = Modifier
                                 .size(20.dp)
@@ -186,7 +182,6 @@ fun ReminderTimeBottomSheet(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // --- Custom Time Section ---
             Text(
                 text = "Or set a custom time",
                 fontSize = 12.sp,
@@ -197,7 +192,6 @@ fun ReminderTimeBottomSheet(
             Surface(
                 onClick = {
                     selectedOptionId = null
-                    // Trigger TimePickerDialog here if needed
                 },
                 shape = RoundedCornerShape(18.dp),
                 color = Color.White,
@@ -231,7 +225,6 @@ fun ReminderTimeBottomSheet(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- Save Button ---
             Button(
                 onClick = {
                     onSaveTime(customTime)

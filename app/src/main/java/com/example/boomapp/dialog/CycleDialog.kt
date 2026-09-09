@@ -27,7 +27,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-// --- Color Palette ---
 private val MaroonBrown = Color(0xFF8B4D3E)
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
@@ -47,10 +46,8 @@ fun LogCycleBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    // Current displayed month in calendar view
     var currentYearMonth by remember { mutableStateOf(YearMonth.of(2026, 7)) }
 
-    // Selected last period start date (defaults to July 30, 2026 as shown in design)
     var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.of(2026, 7, 30)) }
 
     ModalBottomSheet(
@@ -76,7 +73,6 @@ fun LogCycleBottomSheet(
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 28.dp)
         ) {
-            // --- Title and Close Button ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -116,8 +112,6 @@ fun LogCycleBottomSheet(
                 color = TextMuted,
                 modifier = Modifier.padding(top = 6.dp, bottom = 14.dp)
             )
-
-            // --- Custom Calendar Card ---
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -130,7 +124,6 @@ fun LogCycleBottomSheet(
                         .fillMaxWidth()
                         .padding(horizontal = 14.dp, vertical = 12.dp)
                 ) {
-                    // Month Selector Header (< July 2026 >)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -181,7 +174,6 @@ fun LogCycleBottomSheet(
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    // Days of week initials: M T W T F S S
                     val weekDays = listOf("M", "T", "W", "T", "F", "S", "S")
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -201,9 +193,8 @@ fun LogCycleBottomSheet(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Calendar Grid calculation
                     val daysInMonth = currentYearMonth.lengthOfMonth()
-                    val firstDayOfMonth = currentYearMonth.atDay(1).dayOfWeek.value // 1 = Mon, 7 = Sun
+                    val firstDayOfMonth = currentYearMonth.atDay(1).dayOfWeek.value
                     val emptyPrefixCells = firstDayOfMonth - 1
                     val totalCells = emptyPrefixCells + daysInMonth
 
@@ -253,7 +244,6 @@ fun LogCycleBottomSheet(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // --- Legends Row ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -284,7 +274,6 @@ fun LogCycleBottomSheet(
 
             Spacer(modifier = Modifier.height(14.dp))
 
-            // --- Log Your Last Period Information Card ---
             Card(
                 shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = SoftBlushCard),
@@ -325,7 +314,6 @@ fun LogCycleBottomSheet(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            // --- Done Button ---
             Button(
                 onClick = {
                     selectedDate?.let(onDateConfirmed)

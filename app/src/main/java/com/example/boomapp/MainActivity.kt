@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
         val preferences = OnboardingPreferences(applicationContext)
-        // Initialize Google Mobile Ads SDK asynchronously
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@MainActivity) {}
         }
@@ -45,7 +44,6 @@ class MainActivity : ComponentActivity() {
             val scope = rememberCoroutineScope()
             when (isCompleted) {
                 null -> {
-                    // Prevents a sudden white flicker while DataStore initializes
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -54,7 +52,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 false -> {
-                    // First time User
                     OnboardingScreen(
                         onFinished = {
                             scope.launch {

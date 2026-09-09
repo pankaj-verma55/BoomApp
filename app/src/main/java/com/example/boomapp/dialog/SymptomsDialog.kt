@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- Color Palette ---
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
 private val MaroonBrown = Color(0xFF8B4D3E)
@@ -30,11 +29,6 @@ private val PillBorderInactive = Color(0xFFF3DDD7)
 private val PillActiveBg = Color(0xFF8B4D3E)
 private val ButtonMaroon = Color(0xFFA15347)
 
-data class SymptomSectionData(
-    val title: String,
-    val icon: ImageVector,
-    val options: List<String>
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,8 +38,6 @@ fun LogSymptomsBottomSheet(
     modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-    // Track selections for each symptom row
     var selectedBloating by remember { mutableStateOf<String?>(null) }
     var selectedSkin by remember { mutableStateOf<String?>(null) }
     var selectedMood by remember { mutableStateOf<String?>(null) }
@@ -74,7 +66,6 @@ fun LogSymptomsBottomSheet(
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 28.dp)
         ) {
-            // --- Title and Close Button ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -116,7 +107,6 @@ fun LogSymptomsBottomSheet(
                 modifier = Modifier.padding(top = 8.dp, bottom = 20.dp)
             )
 
-            // --- 1. Bloating ---
             SymptomRowSection(
                 title = "Bloating",
                 icon = painterResource(com.example.boomapp.R.drawable.ic_bloating),
@@ -127,7 +117,6 @@ fun LogSymptomsBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- 2. Skin & acne ---
             SymptomRowSection(
                 title = "Skin & acne",
                 icon = painterResource(com.example.boomapp.R.drawable.ic_star_sharp),
@@ -138,7 +127,6 @@ fun LogSymptomsBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- 3. Mood ---
             SymptomRowSection(
                 title = "Mood",
                 icon = painterResource(com.example.boomapp.R.drawable.ic_mood),
@@ -149,7 +137,6 @@ fun LogSymptomsBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- 4. Sleep quality ---
             SymptomRowSection(
                 title = "Sleep quality",
                 icon = painterResource(com.example.boomapp.R.drawable.ic_sleep),
@@ -160,7 +147,6 @@ fun LogSymptomsBottomSheet(
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            // --- Done Button ---
             Button(
                 onClick = {
                     val results = buildMap {
@@ -217,7 +203,6 @@ private fun SymptomRowSection(
             )
         }
 
-        // 4 Options Row
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)

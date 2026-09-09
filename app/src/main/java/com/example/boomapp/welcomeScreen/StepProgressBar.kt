@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun StepProgressBar(
     totalSteps: Int = 4,
-    currentStep: Int, // 0-indexed (0 to 3)
+    currentStep: Int,
     modifier: Modifier = Modifier,
     activeColor: Color = Color(0xFFA65851),
     inactiveColor: Color = Color(0xFFF6E2DE)
@@ -34,7 +34,6 @@ fun StepProgressBar(
                     .weight(1f)
                     .height(6.dp)
                     .clip(RoundedCornerShape(50))
-                    // Highlights up to the active screen (or use == if only one bar lights up)
                     .background(if (stepIndex <= currentStep) activeColor else inactiveColor)
             )
         }

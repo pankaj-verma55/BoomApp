@@ -30,16 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.boomapp.data.HabitItemData
 
-// 1. Data Model
-data class HabitItemData(
-    val id: Int,
-    val iconRes: Int,
-    val title: String,
-    val subtitle: String,
-    val isEnabled: Boolean = true
-)
-// 2. Individual Item Row
 @Composable
 fun HabitRowItem(
     item: HabitItemData,
@@ -55,7 +47,6 @@ fun HabitRowItem(
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Leading Icon with soft circular/squircle background
         Box(
             modifier = Modifier
                 .size(44.dp)
@@ -72,7 +63,6 @@ fun HabitRowItem(
 
         Spacer(modifier = Modifier.width(14.dp))
 
-        // Title and Subtitle
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -95,7 +85,6 @@ fun HabitRowItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Custom Colored Switch
         Switch(
             checked = isChecked,
             onCheckedChange = onCheckedChange,
@@ -126,7 +115,7 @@ fun HabitTrackerList(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        // Use Column here so the outer LazyColumn can measure and scroll it properly
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,7 +132,6 @@ fun HabitTrackerList(
                     }
                 )
 
-                // Divider line between items
                 if (index < stateList.lastIndex) {
                     HorizontalDivider(
                         modifier = Modifier.padding(start = 74.dp, end = 16.dp),

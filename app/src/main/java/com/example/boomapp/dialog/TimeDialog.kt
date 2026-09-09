@@ -33,7 +33,6 @@ fun DialExample(
     onDismiss: () -> Unit,
 ) {
     val currentTime = Calendar.getInstance()
-
     val timePickerState = rememberTimePickerState(
         initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
         initialMinute = currentTime.get(Calendar.MINUTE),
@@ -53,12 +52,10 @@ fun DialExample(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Dial UI
                 TimePicker(state = timePickerState)
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Action Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
@@ -78,15 +75,4 @@ fun DialExample(
             }
         }
     }
-//    Column {
-//        TimePicker(
-//            state = timePickerState,
-//        )
-//        Button(onClick = onDismiss) {
-//            Text("Dismiss picker")
-//        }
-//        Button(onClick = onConfirm) {
-//            Text("Confirm selection")
-//        }
-//    }
 }

@@ -1,6 +1,7 @@
 package com.example.boomapp.dashboard
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
@@ -43,7 +45,6 @@ import com.example.boomapp.dialog.LogMealsBottomSheet
 import com.example.boomapp.dialog.LogMovementBottomSheet
 import com.example.boomapp.dialog.LogSymptomsBottomSheet
 
-// --- Color Palette ---
 private val ScreenBg = Color(0xFFFAF7F2)
 private val DarkText = Color(0xFF2E2623)
 private val MutedText = Color(0xFF918A85)
@@ -71,7 +72,7 @@ data class GoalProgressItem(
 @Composable
 fun BloomDashboard(
     modifier: Modifier = Modifier,
-    userName: String = "Sofia"
+    userName: String = "Verma"
 ) {
 
     var activeDialog by remember { mutableStateOf<GoalDialogType?>(null) }
@@ -162,7 +163,7 @@ fun BloomDashboard(
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // 1. Top Header Row
+        // Header
         item {
             Row(
                 modifier = Modifier
@@ -206,12 +207,12 @@ fun BloomDashboard(
             }
         }
 
-        // 2. Today's Goals Hero Card
+        // Goals
         item {
             Card(
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -253,7 +254,7 @@ fun BloomDashboard(
                         GoalsProgressSection(0,5)
                     }
 
-                    // Flower "Start here" Circle Graphic
+                    // Start here
                     Box(
                         modifier = Modifier
                             .size(80.dp)
@@ -261,9 +262,9 @@ fun BloomDashboard(
                             .background(
                                 brush = Brush.radialGradient(
                                     colors = listOf(
-                                        Color(0x59E8B4AA), // Soft warm peach/rose center
-                                        Color(0x26E8B4AA), // Mid fade
-//                                        Color.Transparent   // Outer transparent blend
+                                        Color(0x59E8B4AA),
+                                        Color(0x26E8B4AA),
+//                                        Color.Transparent
                                     )
                                 )
                             ),
@@ -284,70 +285,8 @@ fun BloomDashboard(
         item {
             PcosFaqPagerSection(sections = sections )
         }
-        // 3. PCOS FAQ Section
-//        item {
-//            SectionHeader("PCOS FAQ")
-//            Card(
-//                shape = RoundedCornerShape(20.dp),
-//                colors = CardDefaults.cardColors(containerColor = Color.White),
-//                modifier = Modifier.fillMaxWidth()
-//            ) {
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 16.dp, vertical = 14.dp),
-//                    verticalAlignment = Alignment.CenterVertically,
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                ) {
-//                    Column(modifier = Modifier.weight(1f)) {
-//                        Text(
-//                            text = "What exactly is PCOS?",
-//                            fontSize = 14.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            color = DarkText
-//                        )
-//                        Text(
-//                            text = "PCOS stands for polycystic ovary syndrome...",
-//                            fontSize = 12.sp,
-//                            color = MutedText,
-//                            maxLines = 1
-//                        )
-//                    }
-//                    Icon(
-//                        painter = painterResource(id=R.drawable.ic_right),
-//                        contentDescription = null,
-//                        tint = MutedText
-//                    )
-//                }
-//            }
-//
-//            // Pager Dots
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 8.dp),
-//                horizontalArrangement = Arrangement.Center,
-//                verticalAlignment = Alignment.CenterVertically
-//            ) {
-//                Box(
-//                    modifier = Modifier
-//                        .size(width = 16.dp, height = 4.dp)
-//                        .clip(RoundedCornerShape(2.dp))
-//                        .background(MaroonBrown)
-//                )
-//                repeat(8) {
-//                    Spacer(modifier = Modifier.width(4.dp))
-//                    Box(
-//                        modifier = Modifier
-//                            .size(4.dp)
-//                            .clip(CircleShape)
-//                            .background(Color(0xFFE2D6CF))
-//                    )
-//                }
-//            }
-//        }
 
-        // 4. Action Cards (Cycle & Symptoms)
+        // Action Cards
         item {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 ActionCard(
@@ -363,27 +302,26 @@ fun BloomDashboard(
             }
         }
 
-        // 5. Goal Progress Header
+        // Progress
         item {
             SectionHeader("Goal Progress")
         }
 
-        // Goal items list
+        // Goal items
         items(goalItems.size) { index ->
             val item = goalItems[index]
             GoalCard(
                 item = item,
                 onClick = { activeDialog = item.dialogType } // 👈 Triggers specific dialog
             )
-//            GoalCard(item = goalItems[index])
         }
 
-        // 6. Today's Tip Card
         item {
             SectionHeader("Today's tip")
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = colorResource(R.color.creamBrown)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
@@ -457,7 +395,6 @@ fun BloomDashboard(
             }
         }
     }
-    // 4. Render the corresponding Dialog or Bottom Sheet
     when (activeDialog) {
         GoalDialogType.MEALS -> {
             LogMealsBottomSheet(onDismissRequest = { activeDialog = null })
@@ -468,7 +405,6 @@ fun BloomDashboard(
                 onDismissRequest = { activeDialog = null },
                 onNavigateToSettings = {
                     activeDialog = null
-                    // Switch tab to settings if desired
                 }
             )
         }
@@ -478,7 +414,6 @@ fun BloomDashboard(
                 onDismissRequest = { activeDialog = null },
                 onNavigateToSettings = {
                     activeDialog = null
-                    // Switch tab to settings if desired
                 }
             )
         }
@@ -488,7 +423,6 @@ fun BloomDashboard(
                 onDismissRequest = { activeDialog = null },
                 onNavigateToSettings = {
                     activeDialog = null
-                    // Switch tab to settings if desired
                 }
             )
         }
@@ -498,7 +432,6 @@ fun BloomDashboard(
                 onDismissRequest = { activeDialog = null },
                 onNavigateToSettings = {
                     activeDialog = null
-                    // Switch tab to settings if desired
                 }
             )
         }
@@ -507,7 +440,6 @@ fun BloomDashboard(
     }
 }
 
-// Section Title Component
 @Composable
 private fun SectionHeader(title: String) {
     Text(
@@ -521,7 +453,6 @@ private fun SectionHeader(title: String) {
     )
 }
 
-// Action Card Component (Soft Pink)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun ActionCard(
@@ -534,14 +465,13 @@ private fun ActionCard(
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.lightCream)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         modifier = Modifier.fillMaxWidth().clickable {
-            // 2. Simply toggle state on click
             if(title=="Cycle") {
                 showCycleSheet = !showCycleSheet
             } else {
                 showSymptomSheet = !showSymptomSheet
             }
-//            showCycleSheet = true
         }
     ) {
         Row(
@@ -584,14 +514,12 @@ private fun ActionCard(
             )
         }
     }
-    // 3. Render the bottom sheet outside the Card when state is true
     if (showCycleSheet) {
         LogCycleBottomSheet(
             onDismissRequest = {
                 showCycleSheet = false
             },
             onDateConfirmed = { date ->
-                // Handle or persist the selected LocalDate
                 showCycleSheet = false
             }
         )
@@ -600,13 +528,11 @@ private fun ActionCard(
         LogSymptomsBottomSheet(
             onDismissRequest = { showSymptomSheet = false },
             onDoneClick = { selectedSymptoms ->
-                // Save symptoms map to ViewModel / DataStore
             }
         )
     }
 }
 
-// Goal Progress Card Component
 @Composable
 private fun GoalCard(
     item: GoalProgressItem,
@@ -614,6 +540,7 @@ private fun GoalCard(
     Card(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         modifier = Modifier.fillMaxWidth().clickable { onClick() },
     ) {
         Row(
@@ -624,7 +551,6 @@ private fun GoalCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                // Colored progress ring around icon
                 Box(
                     modifier = Modifier
                         .size(42.dp)
@@ -662,13 +588,11 @@ private fun GoalCard(
 
 @Composable
 fun GoalsProgressSection(
-    completedCount: Int = 1, // Change dynamically based on completed goals
+    completedCount: Int = 1,
     totalCount: Int = 5
 ) {
-    // Calculate progress fraction (e.g. 1 / 5 = 0.2f)
     val progressFraction = if (totalCount > 0) (completedCount.toFloat() / totalCount).coerceIn(0f, 1f) else 0f
 
-    // Smooth transition when progress changes
     val animatedProgress by animateFloatAsState(
         targetValue = progressFraction,
         label = "GoalProgressAnimation"
@@ -681,22 +605,20 @@ fun GoalsProgressSection(
             color = MutedText
         )
 
-        // Background Track
         Box(
             modifier = Modifier
                 .padding(top = 6.dp)
                 .width(130.dp)
                 .height(4.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(Color(0xFFF4DDD7)) // Inactive light pink background
+                .background(Color(0xFFF4DDD7))
         ) {
-            // Filled Progress Line
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(animatedProgress) // Fills width proportionally (0.2 for 1/5)
+                    .fillMaxWidth(animatedProgress)
                     .clip(RoundedCornerShape(2.dp))
-                    .background(colorResource(R.color.darkBrown)) // Active filled color (e.g., #8B4D3E)
+                    .background(colorResource(R.color.darkBrown))
             )
         }
     }
@@ -708,20 +630,17 @@ fun PcosFaqPagerSection(
     sections: List<LearnSection>,
     onQuestionClick: (String) -> Unit = {}
 ) {
-    // 1. Flatten all questions into a single flat list
     val allQuestions = remember(sections) {
         sections.flatMap { it.questions }
     }
 
     if (allQuestions.isEmpty()) return
 
-    // 2. State to keep track of current swipe position
     val pagerState = rememberPagerState(pageCount = { allQuestions.size })
 
     Column(modifier = Modifier.fillMaxWidth()) {
         SectionHeader("PCOS FAQ")
 
-        // 3. Horizontal Swipable Pager
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
@@ -733,7 +652,7 @@ fun PcosFaqPagerSection(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 onClick = { onQuestionClick(question) }
             ) {
                 Row(
@@ -770,7 +689,6 @@ fun PcosFaqPagerSection(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // 4. Dynamic Indicators (expands into a pill for the selected item)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -799,6 +717,7 @@ fun PcosFaqPagerSection(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PreviewDashboardContent() {

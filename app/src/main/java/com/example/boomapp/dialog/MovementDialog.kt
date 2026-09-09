@@ -24,7 +24,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Color Palette
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
 private val MaroonBrown = Color(0xFF8B4D3E)
@@ -61,9 +60,7 @@ fun LogMovementBottomSheet(
         "Meals" -> {
             dialogTitle = title
         }
-        else -> {
-            // Any other title
-        }
+        else -> {}
     }
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -89,7 +86,6 @@ fun LogMovementBottomSheet(
                 .padding(bottom = 36.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // --- Title and Close Button ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,7 +121,6 @@ fun LogMovementBottomSheet(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // --- Subtitle ---
             Text(
                 text = "Today's $dialogTitle",
                 fontSize = 13.sp,
@@ -134,13 +129,11 @@ fun LogMovementBottomSheet(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            // --- Stepper Row (- 0 min +) ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Minus Button
                 Box(
                     modifier = Modifier
                         .size(52.dp)
@@ -162,7 +155,6 @@ fun LogMovementBottomSheet(
 
                 Spacer(modifier = Modifier.width(28.dp))
 
-                // Value Display
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
                         text = "$movementMinutes",
@@ -181,7 +173,6 @@ fun LogMovementBottomSheet(
 
                 Spacer(modifier = Modifier.width(28.dp))
 
-                // Plus Button
                 Box(
                     modifier = Modifier
                         .size(52.dp)
@@ -201,7 +192,6 @@ fun LogMovementBottomSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // --- Goal & Settings Hint ---
             val goalText = buildAnnotatedString {
                 append("Goal: 30 min · adjust in ")
                 pushStringAnnotation(tag = "SETTINGS", annotation = "settings")
@@ -226,7 +216,6 @@ fun LogMovementBottomSheet(
 
             Spacer(modifier = Modifier.height(22.dp))
 
-            // --- Recommendation Card ---
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = SoftBlushBg),
@@ -265,7 +254,6 @@ fun LogMovementBottomSheet(
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    // Quick "+10 min" increment pill
                     Surface(
                         onClick = { movementMinutes += 10 },
                         shape = RoundedCornerShape(16.dp),

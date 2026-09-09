@@ -23,8 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
-
-// Color Theme
 private val ScreenBackground = Color(0xFFFAF7F2)
 private val TextDark = Color(0xFF2E2623)
 private val TextMuted = Color(0xFF918A85)
@@ -74,7 +72,7 @@ fun InsightsScreen(
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 28.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // --- 1. Header Title ---
+        // Title ---
         item {
             Column(
                 modifier = Modifier
@@ -99,14 +97,14 @@ fun InsightsScreen(
             }
         }
 
-        // --- 2. Your Score Card ---
+        //  Score
         item {
             SectionHeader(title = "Your score")
 
             Card(
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
@@ -238,12 +236,13 @@ fun InsightsScreen(
             }
         }
 
-        // --- 3. Cycle Section ---
+        // Cycle
         item {
             SectionHeader(title = "Cycle")
             Card(
                 shape = RoundedCornerShape(18.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -292,12 +291,13 @@ fun InsightsScreen(
             }
         }
 
-        // --- 4. Daily Summary Section ---
+        //  Summary
         item {
             SectionHeader(title = "Daily summary")
             Card(
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -342,7 +342,7 @@ fun InsightsScreen(
             }
         }
 
-        // --- 5. Symptom Patterns Section ---
+        // Symptom
         item {
             SectionHeader(title = "Symptom patterns")
         }
@@ -353,7 +353,7 @@ fun InsightsScreen(
     }
 }
 
-// Sub-component for Section Titles
+// Section Titles
 @Composable
 private fun SectionHeader(title: String) {
     Text(
@@ -366,13 +366,12 @@ private fun SectionHeader(title: String) {
         modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
     )
 }
-
-// Sub-component for Symptom Item Cards with 7 Heat Bars
 @Composable
 private fun SymptomCard(item: SymptomPatternItem) {
     Card(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -418,7 +417,7 @@ private fun SymptomCard(item: SymptomPatternItem) {
                 }
             }
 
-            // 7-day mini frequency vertical bars
+            // vertical bars
             Row(
                 horizontalArrangement = Arrangement.spacedBy(3.dp),
                 verticalAlignment = Alignment.CenterVertically

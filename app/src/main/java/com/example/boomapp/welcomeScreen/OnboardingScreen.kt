@@ -1,5 +1,6 @@
 package com.example.boomapp.welcomeScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -19,12 +20,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.boomapp.OnboardingPreferences
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,9 +40,15 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     val totalPages = 4
     val pagerState = rememberPagerState(pageCount = { totalPages })
     val scope = rememberCoroutineScope()
-
     val primaryBrown = Color(0xFFA65851)
     val lightCreamBackground = Color(0xFFFBF8F5)
+    val context = LocalContext.current
+    val preferences = remember {
+        OnboardingPreferences(context)
+    }
+    var name by rememberSaveable {
+        mutableStateOf("")
+    }
 
     Scaffold(
         containerColor = lightCreamBackground,
@@ -64,7 +78,13 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         } else {
-                            onFinished()
+                            scope.launch {
+                                // Save name
+                                preferences.saveUserName(name)
+                                preferences.setOnboardingCompleted()
+                                onFinished()
+                            }
+//                            onFinished()
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = primaryBrown),
@@ -87,7 +107,6 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             }
         }
     ) { innerPadding ->
-        // 👇 HERE IS THE MAIN CHANGE:
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -96,7 +115,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         ) { pageIndex ->
             when (pageIndex) {
                 0 -> OnboardingStepOne()
-                1 -> OnboardingStepTwo()
+                1 -> OnboardingStepTwo(name, onNameChange = {name = it})
                 2 -> OnboardingStepThree()
                 3 -> OnboardingStepFour()
             }

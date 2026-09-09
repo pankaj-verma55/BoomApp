@@ -33,11 +33,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -47,8 +49,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.boomapp.OnboardingPreferences
 import com.example.boomapp.R
+import com.example.boomapp.data.HabitItemData
 import com.example.boomapp.dialog.DialExample
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -107,7 +112,6 @@ val pages = listOf(
 
 @Composable
 fun OnboardingStepOne() {
-    // UI from your screenshot (Flower icon + Welcome text)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -137,8 +141,9 @@ fun OnboardingStepOne() {
 }
 
 @Composable
-fun OnboardingStepTwo() {
-    var name by remember { mutableStateOf("") }
+fun OnboardingStepTwo(
+    name: String,
+    onNameChange: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -155,7 +160,9 @@ fun OnboardingStepTwo() {
         Spacer(modifier = Modifier.height(20.dp))
         BasicTextField(
             value = name,
-            onValueChange = { name = it },
+            onValueChange = {
+                onNameChange(it)
+            },
             textStyle = TextStyle(fontSize = 16.sp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -189,7 +196,6 @@ fun OnboardingStepThree() {
                 painter = painterResource(id = R.drawable.ic_star), contentDescription = "Star Logo"
             )
         }
-        // 2. Title
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
@@ -203,7 +209,6 @@ fun OnboardingStepThree() {
             )
         }
 
-        // 3. Subtitle Description
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -214,14 +219,12 @@ fun OnboardingStepThree() {
                 textAlign = TextAlign.Center
             )
         }
-        // 4. White Card Tracker List (Rendered ONCE, not in a loop)
         item {
             HabitTrackerList(
                 items = pages, modifier = Modifier.padding(top = 16.dp)
             )
         }
 
-        // 5. Footer Note
         item {
             Text(
                 modifier = Modifier.padding(top = 8.dp, bottom = 16.dp),
@@ -263,7 +266,7 @@ fun OnboardingStepFour() {
                 painter = painterResource(id = R.drawable.ic_time), contentDescription = "Star Logo"
             )
         }
-        // 2. Title
+
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
@@ -277,7 +280,6 @@ fun OnboardingStepFour() {
             )
         }
 
-        // 3. Subtitle Description
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -288,7 +290,6 @@ fun OnboardingStepFour() {
                 textAlign = TextAlign.Center
             )
         }
-        // 4. White Card Tracker List (Rendered ONCE, not in a loop)
         item {
             Column(
                 modifier = Modifier
@@ -309,7 +310,6 @@ fun OnboardingStepFour() {
                         .padding(horizontal = 16.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
-//                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Row(
                         modifier = Modifier
@@ -321,7 +321,7 @@ fun OnboardingStepFour() {
                             selected = morning,
                             onClick = {
                                 morning = !morning
-                            }, // Set to null since the entire Row is clickable
+                            },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = primaryBrown,
                                 unselectedColor = Color(0xFFC4B5B0)
@@ -358,12 +358,11 @@ fun OnboardingStepFour() {
                             .padding(vertical = 14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Leading Icon with soft circular/squircle background
                         RadioButton(
                             selected = afterNoon,
                             onClick = {
                                 afterNoon = !afterNoon
-                            }, // Set to null since the entire Row is clickable
+                            },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = primaryBrown,
                                 unselectedColor = Color(0xFFC4B5B0)
@@ -401,12 +400,11 @@ fun OnboardingStepFour() {
                             .padding(vertical = 14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Leading Icon with soft circular/squircle background
                         RadioButton(
                             selected = evening,
                             onClick = {
                                 evening = !evening
-                            }, // Set to null since the entire Row is clickable
+                            },
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = primaryBrown,
                                 unselectedColor = Color(0xFFC4B5B0)
@@ -461,7 +459,6 @@ fun OnboardingStepFour() {
                         if (showBottomSheet) {
                             DialExample(
                                 onConfirm = { hour, minute ->
-                                    // Use selected hour & minute
                                     selectedTimeText = formatTime(hour, minute)
                                     showBottomSheet = false
                                 },

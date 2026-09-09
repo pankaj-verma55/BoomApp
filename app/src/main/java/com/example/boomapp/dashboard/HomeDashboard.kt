@@ -14,14 +14,17 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import com.example.boomapp.OnboardingPreferences
 import com.example.boomapp.R
 import com.example.boomapp.data.AdmobBanner
 
@@ -33,6 +36,12 @@ data class BottomNavItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeDashboard(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val preferences = remember {
+        OnboardingPreferences(context)
+    }
+    val userName by preferences.userName.collectAsState(initial = "")
+
     var selectedItemIndex by remember { mutableIntStateOf(0) }
 
     val navItems = listOf(
@@ -43,7 +52,7 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
     )
 
     Scaffold(
-        modifier = modifier.fillMaxSize(), // 👈 Uses incoming modifier here ONLY
+        modifier = modifier.fillMaxSize(),
         containerColor = colorResource(R.color.cream),
         topBar = {},
         bottomBar = {
@@ -76,17 +85,16 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
             }
         }
     ) { innerPadding ->
-        // ✅ Direct Box container instead of LazyColumn
         Box(
             modifier = Modifier
                 .fillMaxSize().background(colorResource(R.color.cream))
                 .padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             when (selectedItemIndex) {
-                0 -> BloomDashboard(userName = "Pankaj")
+                0 -> BloomDashboard(userName = userName)
                 1 -> InsightsScreen()
                 2 -> LearnScreen()
-                3 -> SettingsScreen()
+                3 -> SettingsScreen(userName = userName)
             }
         }
     }

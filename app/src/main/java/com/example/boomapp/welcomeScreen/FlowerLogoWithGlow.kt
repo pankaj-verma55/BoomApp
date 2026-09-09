@@ -17,7 +17,6 @@ import com.example.boomapp.R
 fun FlowerLogoWithGlow(
     modifier: Modifier = Modifier
 ) {
-    // 1. Soft pinkish-brown tint matching your theme
     val glowColor = Color(0xFFA65851).copy(alpha = 0.22f)
 
     Box(
@@ -26,17 +25,16 @@ fun FlowerLogoWithGlow(
             .background(
                 Brush.radialGradient(
                     colors = listOf(
-                        glowColor,          // Stronger at the center
-                        glowColor.copy(alpha = 0.08f), // Soft falloff
-                        Color.Transparent   // Fades out completely toward edges
+                        glowColor,
+                        glowColor.copy(alpha = 0.08f),
+                        Color.Transparent
                     )
                 )
             ),
         contentAlignment = Alignment.Center
     ) {
-        // 2. The central flower icon
         Image(
-            painter = painterResource(id = R.drawable.ic_logo), // Replace with your vector/drawable
+            painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = "Bloom Logo",
             modifier = Modifier
         )
