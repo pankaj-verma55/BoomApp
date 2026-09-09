@@ -13,4 +13,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="cream">#FCFAF8</color>
     <color name="lightRed">#F3DEDC</color>
+    <color name="green">#71967A</color>
+    <color name="blue">#4C84A8</color>
+    <color name="purple">#8778A8</color>
+    <color name="darkPurple">#5B5B7C</color>
+    <color name="lightBlue">#E4E3EA</color>
+    <color name="darkBrown">#7C3D38</color>
+    <color name="lightCream">#FBF0EF</color>
+    <color name="creamBrown">#F3E7D3</color>
+    <color name="brown">#8A5A1E</color>
 </resources>

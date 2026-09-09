@@ -1,17 +1,9 @@
-package com.example.boomapp.homeScreen
+package com.example.boomapp.dashboard
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -23,15 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
 
 data class BottomNavItem(
@@ -52,7 +39,7 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
 
     Scaffold(
         modifier = modifier.fillMaxSize(), // 👈 Uses incoming modifier here ONLY
-        containerColor = Color(0xFFFAF7F2),
+        containerColor = colorResource(R.color.cream),
         topBar = {},
         bottomBar = {
             NavigationBar(
@@ -70,8 +57,8 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
                             )
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = colorResource(R.color.lightRed),
-                            selectedTextColor = colorResource(R.color.lightRed),
+                            selectedIconColor = colorResource(R.color.darkBrown),
+                            selectedTextColor = colorResource(R.color.darkBrown),
                             unselectedIconColor = colorResource(R.color.lightBrown),
                             unselectedTextColor = colorResource(R.color.lightBrown),
                             indicatorColor = colorResource(R.color.lightRed).copy(alpha = 0.2f)
@@ -81,11 +68,18 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
             }
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(), // 👈 Fresh Modifier (capital M)
-            contentPadding = innerPadding      // 👈 Ensures items don't overlap with NavigationBar
+        // ✅ Direct Box container instead of LazyColumn
+        Box(
+            modifier = Modifier
+                .fillMaxSize().background(colorResource(R.color.cream))
+                .padding(bottom = innerPadding.calculateBottomPadding())
         ) {
-            // Your list items / cards go here
+            when (selectedItemIndex) {
+                0 -> BloomDashboard(userName = "Pankaj")
+                1 -> InsightsScreen()
+                2 -> LearnScreen()
+                3 -> SettingsScreen()
+            }
         }
     }
 }
