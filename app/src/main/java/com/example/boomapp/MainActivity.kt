@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.example.boomapp.homeScreen.HomeDashboard
 import com.example.boomapp.ui.theme.BoomAppTheme
 import com.example.boomapp.welcomeScreen.OnboardingScreen
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 null -> {
                     // Optional: Show Splash Screen / Empty Box while DataStore loads
                 }
+
                 false -> {
                     // First time User
                     OnboardingScreen(
@@ -44,21 +46,17 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 }
+
                 true -> {
                     BoomAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-//                    HomeScreen()
+                        HomeDashboard(modifier = Modifier.fillMaxSize())
+                    }
                 }
             }
         }
-        }
     }
 }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

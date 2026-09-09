@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="newBlack">#2E2622</color>
     <color name="lightBrown">#8A7A73</color>
+    <color name="lightIconBg">#FFFBF1EE</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="cream">#FCFAF8</color>
