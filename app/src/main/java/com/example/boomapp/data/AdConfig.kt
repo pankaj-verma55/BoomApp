@@ -12,7 +12,9 @@ object AdConfig {
     private const val TEST_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"
 
 //    unit id
-    private const val PROD_BANNER_ID = "ca-app-pub-3673493958204954/3785510339"
+    const val PROD_BANNER_ID = "ca-app-pub-3673493958204954/3785510339"
+//    const val appOpenAdUnitId =
+//        "ca-app-pub-3940256099942544/9257395921"
 
 
     val bannerAdUnitId: String
