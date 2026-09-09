@@ -1,10 +1,13 @@
 package com.example.boomapp.dashboard
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
@@ -14,7 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,9 +34,14 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
+import com.example.boomapp.dialog.LogCycleBottomSheet
+import com.example.boomapp.dialog.LogMealsBottomSheet
+import com.example.boomapp.dialog.LogMovementBottomSheet
+import com.example.boomapp.dialog.LogSymptomsBottomSheet
 
 // --- Color Palette ---
 private val ScreenBg = Color(0xFFFAF7F2)
@@ -40,19 +50,31 @@ private val MutedText = Color(0xFF918A85)
 private val MaroonBrown = Color(0xFF8B4D3E)
 private val GreenBtn = Color(0xFF638B75)
 
+enum class GoalDialogType {
+    MEALS,
+    MOVEMENT,
+    WATER,
+    RELAXATION,
+    SLEEP
+}
+
 data class GoalProgressItem(
     val title: String,
     val subtitle: String,
     val icon: ImageVector,
     val ringColor: Color,
-    val iconColor: Color = ringColor
+    val iconColor: Color = ringColor,
+    val dialogType: GoalDialogType
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BloomDashboard(
     modifier: Modifier = Modifier,
     userName: String = "Sofia"
 ) {
+
+    var activeDialog by remember { mutableStateOf<GoalDialogType?>(null) }
     val sections = listOf(
         LearnSection(
             title = "Diagnosis & basics",
@@ -96,35 +118,40 @@ fun BloomDashboard(
             title = "Meals",
             subtitle = "0/3 meals",
             icon = ImageVector.vectorResource(id = R.drawable.ic_meal),
-            ringColor = Color(0xFFA64D43)
+            ringColor = Color(0xFFA64D43),
+            dialogType = GoalDialogType.MEALS
         ),
         GoalProgressItem(
             title = "Movement",
             subtitle = "0/30 min",
             icon = ImageVector.vectorResource(id = R.drawable.ic_movement),
             ringColor = Color(0xFF5E8C76),
-            iconColor = colorResource(R.color.green)
+            iconColor = colorResource(R.color.green),
+            dialogType = GoalDialogType.MOVEMENT
         ),
         GoalProgressItem(
             title = "Water",
             subtitle = "0/8 glasses",
             icon = ImageVector.vectorResource(id = R.drawable.ic_water),
             ringColor = Color(0xFF4C82A6),
-            iconColor = colorResource(R.color.blue)
+            iconColor = colorResource(R.color.blue),
+            dialogType = GoalDialogType.WATER
         ),
         GoalProgressItem(
             title = "Relaxation",
             subtitle = "0/15 min",
             icon = ImageVector.vectorResource(id = R.drawable.ic_relex),
             ringColor = Color(0xFF7A6B9B),
-            iconColor = colorResource(R.color.purple)
+            iconColor = colorResource(R.color.purple),
+            dialogType = GoalDialogType.RELAXATION
         ),
         GoalProgressItem(
             title = "Sleep",
             subtitle = "0/8 hrs",
             icon = ImageVector.vectorResource(id = R.drawable.ic_sleep),
             ringColor = Color(0xFF53597D),
-            iconColor = colorResource(R.color.darkPurple)
+            iconColor = colorResource(R.color.darkPurple),
+            dialogType = GoalDialogType.SLEEP
         )
     )
 
@@ -343,7 +370,12 @@ fun BloomDashboard(
 
         // Goal items list
         items(goalItems.size) { index ->
-            GoalCard(item = goalItems[index])
+            val item = goalItems[index]
+            GoalCard(
+                item = item,
+                onClick = { activeDialog = item.dialogType } // 👈 Triggers specific dialog
+            )
+//            GoalCard(item = goalItems[index])
         }
 
         // 6. Today's Tip Card
@@ -425,6 +457,54 @@ fun BloomDashboard(
             }
         }
     }
+    // 4. Render the corresponding Dialog or Bottom Sheet
+    when (activeDialog) {
+        GoalDialogType.MEALS -> {
+            LogMealsBottomSheet(onDismissRequest = { activeDialog = null })
+        }
+        GoalDialogType.MOVEMENT -> {
+            LogMovementBottomSheet(
+                "Movement",
+                onDismissRequest = { activeDialog = null },
+                onNavigateToSettings = {
+                    activeDialog = null
+                    // Switch tab to settings if desired
+                }
+            )
+        }
+        GoalDialogType.WATER -> {
+            LogMovementBottomSheet(
+                "Water",
+                onDismissRequest = { activeDialog = null },
+                onNavigateToSettings = {
+                    activeDialog = null
+                    // Switch tab to settings if desired
+                }
+            )
+        }
+        GoalDialogType.RELAXATION -> {
+            LogMovementBottomSheet(
+                "Relaxation",
+                onDismissRequest = { activeDialog = null },
+                onNavigateToSettings = {
+                    activeDialog = null
+                    // Switch tab to settings if desired
+                }
+            )
+        }
+        GoalDialogType.SLEEP -> {
+            LogMovementBottomSheet(
+                "Sleep",
+                onDismissRequest = { activeDialog = null },
+                onNavigateToSettings = {
+                    activeDialog = null
+                    // Switch tab to settings if desired
+                }
+            )
+        }
+        null -> { /* No dialog shown */ }
+        else -> {}
+    }
 }
 
 // Section Title Component
@@ -442,16 +522,27 @@ private fun SectionHeader(title: String) {
 }
 
 // Action Card Component (Soft Pink)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun ActionCard(
     title: String,
     subtitle: String,
     icon: Painter
 ) {
+    var showCycleSheet by remember { mutableStateOf(false) }
+    var showSymptomSheet by remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.lightCream)),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable {
+            // 2. Simply toggle state on click
+            if(title=="Cycle") {
+                showCycleSheet = !showCycleSheet
+            } else {
+                showSymptomSheet = !showSymptomSheet
+            }
+//            showCycleSheet = true
+        }
     ) {
         Row(
             modifier = Modifier
@@ -493,15 +584,37 @@ private fun ActionCard(
             )
         }
     }
+    // 3. Render the bottom sheet outside the Card when state is true
+    if (showCycleSheet) {
+        LogCycleBottomSheet(
+            onDismissRequest = {
+                showCycleSheet = false
+            },
+            onDateConfirmed = { date ->
+                // Handle or persist the selected LocalDate
+                showCycleSheet = false
+            }
+        )
+    }
+    if (showSymptomSheet) {
+        LogSymptomsBottomSheet(
+            onDismissRequest = { showSymptomSheet = false },
+            onDoneClick = { selectedSymptoms ->
+                // Save symptoms map to ViewModel / DataStore
+            }
+        )
+    }
 }
 
 // Goal Progress Card Component
 @Composable
-private fun GoalCard(item: GoalProgressItem) {
+private fun GoalCard(
+    item: GoalProgressItem,
+    onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
     ) {
         Row(
             modifier = Modifier
@@ -684,4 +797,11 @@ fun PcosFaqPagerSection(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDashboardContent() {
+    BloomDashboard()
+
 }

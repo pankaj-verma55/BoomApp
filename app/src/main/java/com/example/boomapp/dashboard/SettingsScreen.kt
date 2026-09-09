@@ -19,9 +19,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
+import com.example.boomapp.dialog.ReminderTimeBottomSheet
 
 // Color Palette
 private val ScreenBackground = Color(0xFFFAF7F2)
@@ -56,6 +58,8 @@ fun SettingsScreen(
     userName: String = "Pankaj",
     onSignOutClick: () -> Unit = {}
 ) {
+    var showReminderSheet by remember { mutableStateOf(false) }
+    var reminderTime by remember { mutableStateOf("8:00 AM") }
     var notificationsEnabled by remember { mutableStateOf(true) }
 
     var mealsCount by remember { mutableIntStateOf(3) }
@@ -356,7 +360,7 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /* Reminder time picker */ },
+                            .clickable { showReminderSheet = true },
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -368,7 +372,15 @@ fun SettingsScreen(
                             contentDescription = null, tint = TextMuted,
                             modifier = Modifier.size(18.dp))
                     }
-
+                    if (showReminderSheet) {
+                        ReminderTimeBottomSheet(
+                            initialTime = reminderTime,
+                            onDismissRequest = { showReminderSheet = false },
+                            onSaveTime = { newTime ->
+                                reminderTime = newTime
+                            }
+                        )
+                    }
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 12.dp),
                         thickness = 0.6.dp,
@@ -578,4 +590,10 @@ private fun GoalCounterRow(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSetting() {
+    SettingsScreen()
 }
