@@ -46,25 +46,15 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 inactiveColor = Color(0xFFF3E2DE),
                 modifier = Modifier
                     .statusBarsPadding()
-                    .padding(top = 32.dp, bottom = 8.dp)
+                    .padding( bottom = 8.dp)
             )
         },
-//        topBar = {
-////            Spacer(modifier = Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
-//            // The 4-bar indicator stays and updates automatically as you swipe
-//            StepProgressBar(
-//                totalSteps = totalPages,
-//                currentStep = pagerState.currentPage,
-//                activeColor = primaryBrown,
-//                inactiveColor = Color(0xFFF3E2DE),
-//                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-//            )
-//        },
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 48.dp)
+                    .padding(horizontal = 24.dp)
+                    .padding(top = 24.dp, bottom = 8.dp)
                     .navigationBarsPadding()
             ) {
                 Button(

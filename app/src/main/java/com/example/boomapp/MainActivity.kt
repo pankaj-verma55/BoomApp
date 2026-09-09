@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         installSplashScreen()
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
         actionBar?.hide()
         val preferences = OnboardingPreferences(applicationContext)
         setContent {

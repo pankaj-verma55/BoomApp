@@ -22,7 +22,7 @@ fun FlowerLogoWithGlow(
 
     Box(
         modifier = modifier
-            .size(240.dp) // Large area for the ambient glow to spread
+            .size(240.dp)
             .background(
                 Brush.radialGradient(
                     colors = listOf(
