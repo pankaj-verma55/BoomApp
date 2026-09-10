@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.boomapp.dashboard.HomeDashboard
 import com.example.boomapp.data.AdmobBanner
 import com.example.boomapp.data.AppOpenAdManager
+import com.example.boomapp.data.dataStore.AdPreferences
 import com.example.boomapp.ui.theme.BoomAppTheme
 import com.example.boomapp.welcomeScreen.OnboardingScreen
 import com.google.android.gms.ads.MobileAds
@@ -40,6 +41,10 @@ class MainActivity : ComponentActivity() {
         val preferences = OnboardingPreferences(applicationContext)
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@MainActivity) {}
+        }
+        // Check and set session ad state
+        lifecycleScope.launch {
+            AdPreferences.initSession(applicationContext)
         }
         setContent {
             // Collect the completion status; null represents loading

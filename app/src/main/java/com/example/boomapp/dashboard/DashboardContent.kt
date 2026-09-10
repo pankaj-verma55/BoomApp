@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
+import com.example.boomapp.data.AdaptiveAdmobBanner
 import com.example.boomapp.dialog.EditProfile
 import com.example.boomapp.dialog.LogCycleBottomSheet
 import com.example.boomapp.dialog.LogMealsBottomSheet
@@ -315,6 +316,10 @@ fun BloomDashboard(
                     icon = painterResource(R.drawable.ic_smile)
                 )
             }
+        }
+//        Adaptive banner ad
+        item {
+            AdaptiveAdmobBanner()
         }
 
         // Progress

@@ -1,8 +1,6 @@
 package com.example.boomapp.data
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -22,7 +20,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +34,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.boomapp.OnboardingPreferences
 import com.example.boomapp.R
 import com.example.boomapp.data.dataStore.AdPreferences
 import com.google.android.gms.ads.AdListener
@@ -45,13 +41,13 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.appopen.AppOpenAd
 
 @Composable
-fun AdmobBanner(
+fun AdaptiveAdmobBanner(
     modifier: Modifier = Modifier,
     adUnitId: String = AdConfig.bannerAdUnitId,
-    adSize: AdSize = AdSize.BANNER
+    adSize: AdSize = AdSize.BANNER,
+    onUserDismissed: () -> Unit = {}
 ) {
     // 1. If user is in their first-ever session, render nothing
     if (!AdPreferences.isEligibleForAdsInThisSession) {
@@ -60,27 +56,29 @@ fun AdmobBanner(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     var isDismissed by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(true) }
+    var isAdLoaded by remember { mutableStateOf(true) }
     var isAdVisible by remember { mutableStateOf(true) }
     val adWidth = configuration.screenWidthDp
     val adaptiveAdSize = remember(adWidth) {
         AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidth)
     }
+
+
     val adView = remember(adaptiveAdSize) {
         AdView(context).apply {
-            setAdSize(adSize)
+            setAdSize(adaptiveAdSize)
             this.adUnitId = adUnitId
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
-                    isLoading = false
-//                    isAdVisible = true
+                    isAdLoaded = false
+                    isAdVisible = true
                     AdAnalytics.logEvent("banner_ad_loaded", mapOf("ad_unit" to adUnitId))
                     android.util.Log.d("AdMob-->", "Ad loaded successfully!")
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    isLoading = false
-//                    isAdVisible = false
+                    isAdLoaded = false
+                    isAdVisible = true
                     AdAnalytics.logEvent(
                         "banner_ad_failed",
                         mapOf("code" to error.code, "message" to error.message)
@@ -98,18 +96,21 @@ fun AdmobBanner(
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                    android.util.Log.e("AdMob-->", "Ad failed: ${error.message} (code ${error.code})")
+                    android.util.Log.e(
+                        "AdMob-->",
+                        "Ad failed: ${error.message} (code ${error.code})"
+                    )
                 }
+
                 override fun onAdImpression() {
                     AdAnalytics.logEvent("banner_ad_impression", mapOf("ad_unit" to adUnitId))
                 }
-
             }
             loadAd(AdRequest.Builder().build())
         }
     }
 
-    DisposableEffect(Unit) {
+    DisposableEffect(adView) {
         onDispose {
             adView.destroy()
         }
@@ -127,7 +128,7 @@ fun AdmobBanner(
             contentAlignment = Alignment.Center
         ) {
             // Loader while AdMob is loading
-            if (isLoading) {
+            if (isAdLoaded) {
 
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
@@ -156,7 +157,10 @@ fun AdmobBanner(
                         ) {
                             isAdVisible = false
                             isDismissed = true
-                            AdAnalytics.logEvent("banner_ad_user_closed", mapOf("ad_unit" to adUnitId))
+                            AdAnalytics.logEvent(
+                                "banner_ad_user_closed",
+                                mapOf("ad_unit" to adUnitId)
+                            )
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -170,18 +174,4 @@ fun AdmobBanner(
             }
         }
     }
-}
-
-fun isNetworkAvailable(context: Context): Boolean {
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    val network = connectivityManager.activeNetwork ?: return false
-
-    val capabilities =
-        connectivityManager.getNetworkCapabilities(network) ?: return false
-
-    return capabilities.hasCapability(
-        NetworkCapabilities.NET_CAPABILITY_INTERNET
-    )
 }

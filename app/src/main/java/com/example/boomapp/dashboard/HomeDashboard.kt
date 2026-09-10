@@ -26,6 +26,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import com.example.boomapp.OnboardingPreferences
 import com.example.boomapp.R
+import com.example.boomapp.data.AdaptiveAdmobBanner
 import com.example.boomapp.data.AdmobBanner
 
 data class BottomNavItem(
@@ -57,7 +58,7 @@ fun HomeDashboard(modifier: Modifier = Modifier) {
         topBar = {},
         bottomBar = {
             Column {
-                AdmobBanner()
+                AdaptiveAdmobBanner()
                 NavigationBar(
                     containerColor = Color.White
                 ) {
