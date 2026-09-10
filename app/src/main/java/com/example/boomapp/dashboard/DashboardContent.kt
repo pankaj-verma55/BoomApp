@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.boomapp.R
+import com.example.boomapp.dialog.EditProfile
 import com.example.boomapp.dialog.LogCycleBottomSheet
 import com.example.boomapp.dialog.LogMealsBottomSheet
 import com.example.boomapp.dialog.LogMovementBottomSheet
@@ -74,7 +75,8 @@ fun BloomDashboard(
     modifier: Modifier = Modifier,
     userName: String = "Verma"
 ) {
-
+    var showEditProfileSheet by remember { mutableStateOf(false) }
+    var userStage by remember { mutableStateOf<String?>("Not set") }
     var activeDialog by remember { mutableStateOf<GoalDialogType?>(null) }
     val sections = listOf(
         LearnSection(
@@ -195,6 +197,9 @@ fun BloomDashboard(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
+                        .clickable{
+                            showEditProfileSheet = true
+                        }
                         .background(Color(0xFFF8DDD9)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -202,6 +207,16 @@ fun BloomDashboard(
                         modifier = Modifier.size(20.dp),
                         painter = painterResource(id = R.drawable.ic_person),
                         contentDescription = "Profile",
+                    )
+                }
+                if (showEditProfileSheet) {
+                    EditProfile(
+                        currentName = userName,
+                        currentStageId = userStage,
+                        onDismissRequest = { showEditProfileSheet = false },
+                        onSaveProfile = { name, newStageId ->
+                            userStage = newStageId
+                        }
                     )
                 }
             }
