@@ -9,11 +9,17 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -23,8 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.boomapp.OnboardingPreferences
@@ -44,7 +53,8 @@ fun AdmobBanner(
 ) {
     val context = LocalContext.current
     val appPreferences = remember { OnboardingPreferences(context) }
-
+    // In-memory state: resets to false whenever app restarts
+    var isDismissed by remember { mutableStateOf(false) }
     val canShowAds by appPreferences.isOnboardingCompleted.collectAsState(initial = false)
 
     if (!canShowAds) {
@@ -60,12 +70,17 @@ fun AdmobBanner(
                 override fun onAdLoaded() {
                     isLoading = false
                     isAdVisible = true
+                    AdAnalytics.logEvent("banner_ad_loaded", mapOf("ad_unit" to adUnitId))
                     android.util.Log.d("AdMob-->", "Ad loaded successfully!")
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     isLoading = false
                     isAdVisible = false
+                    AdAnalytics.logEvent(
+                        "banner_ad_failed",
+                        mapOf("code" to error.code, "message" to error.message)
+                    )
                     if (!isNetworkAvailable(context)) {
                         Toast.makeText(
                             context,
@@ -120,11 +135,32 @@ fun AdmobBanner(
                     modifier = Modifier.fillMaxWidth(),
                     factory = { adView }
                 )
+                // Right-side Cancel / Cross Icon
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(top = 4.dp, end = 6.dp)
+                        .size(22.dp)
+                        .clip(CircleShape)
+                        .background(Color.Black.copy(alpha = 0.6f))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            isAdVisible = false
+                            isDismissed = true
+                            AdAnalytics.logEvent("banner_ad_user_closed", mapOf("ad_unit" to adUnitId))
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_cross),
+                        contentDescription = "Close Ad",
+                        tint = Color.White,
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
             }
-//            AndroidView(
-//                modifier = Modifier.fillMaxWidth(),
-//                factory = { adView }
-//            )
         }
     }
 }
