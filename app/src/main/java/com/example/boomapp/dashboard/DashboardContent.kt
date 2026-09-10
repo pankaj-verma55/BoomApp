@@ -1,5 +1,6 @@
 package com.example.boomapp.dashboard
 
+import android.R.attr.alpha
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -269,23 +271,31 @@ fun BloomDashboard(
                         )
                         GoalsProgressSection(0,5)
                     }
-
-                    // Start here
+// Start here
                     Box(
                         modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)
+                            .size(100.dp)
                             .background(
                                 brush = Brush.radialGradient(
                                     colors = listOf(
                                         Color(0x59E8B4AA),
                                         Color(0x26E8B4AA),
-//                                        Color.Transparent
+                                        Color.Transparent
                                     )
                                 )
                             ),
                         contentAlignment = Alignment.Center
                     ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_star),
+                            contentDescription = "Star Icon",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .graphicsLayer { alpha = 0.4f },
+                            tint = Color(0xFFE8B4AA)
+                        )
+
+                        // Foreground Text
                         Text(
                             text = "Start here",
                             fontSize = 13.sp,
@@ -295,6 +305,31 @@ fun BloomDashboard(
                             color = MaroonBrown
                         )
                     }
+                    // Start here
+//                    Box(
+//                        modifier = Modifier
+//                            .size(80.dp)
+//                            .clip(CircleShape)
+//                            .background(
+//                                brush = Brush.radialGradient(
+//                                    colors = listOf(
+//                                        Color(0x59E8B4AA),
+//                                        Color(0x26E8B4AA),
+////                                        Color.Transparent
+//                                    )
+//                                )
+//                            ),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        Text(
+//                            text = "Start here",
+//                            fontSize = 13.sp,
+//                            fontStyle = FontStyle.Italic,
+//                            fontFamily = FontFamily.Serif,
+//                            fontWeight = FontWeight.SemiBold,
+//                            color = MaroonBrown
+//                        )
+//                    }
                 }
             }
         }
